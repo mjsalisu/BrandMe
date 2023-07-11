@@ -1,8 +1,8 @@
 from app import db
 from app import ma
-from app.user.models import User
+from app.category.models import Category
 
 
-class UserSchema(ma.SQLAlchemyAutoSchema):
+class CategorySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = User
+        model = Category

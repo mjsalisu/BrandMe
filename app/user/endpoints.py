@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from app.user.models import User
+from app.user.schema import UserSchema, UsersSchema
 
 user = Blueprint('user', __name__, url_prefix='/user')
 
@@ -31,14 +32,29 @@ def user_login():
        
     return {"message": 'Invalid username or password', "status": 400}
 
-@user.put('update')
-def update_user():
-    return True
+@user.patch('edit/<int:user_id>')
+def update_user(user_id):
+    name = request.json.get('name')
+    username = request.json.get('username')
+    password = request.json.get('password')
+    
+    check_user = User.get_user_by_id(user_id=user_id)
+    if check_user:
+        User.edit_user(check_user, name=name, username=username, password=password)
+        return {"message": 'User updated successfully', "status": 200}
+    
+    return {"message": 'User not found', "status": 400}
 
-@user.get('<int:user_id>')
+@user.get('view/<int:user_id>')
 def get_user(user_id):
+    user = User.get_user_by_id(user_id)
+    if user:
+        user = UserSchema().dump(user)
+        return {"user": user, "status": 200}
     return True
 
 @user.get('all')
 def get_all_users():
-    return True
+    users = User.query.all()
+    users_list = UsersSchema().dump(users, many=True)
+    return {"users": users_list, "status": 200}

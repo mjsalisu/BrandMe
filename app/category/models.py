@@ -19,6 +19,10 @@ class Category(db.Model):
         db.session.commit()
 
     @classmethod
+    def get_category_id(cls, category_id):
+        return cls.query.filter_by(category_id=category_id).first()
+
+    @classmethod
     def get_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
 

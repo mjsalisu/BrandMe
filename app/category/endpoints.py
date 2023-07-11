@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from app.category.models import Category
+from app.category.schema import CategorySchema
 
 category = Blueprint('category', __name__, url_prefix='/category')
 
@@ -23,8 +24,15 @@ def update_category():
 
 @category.get('<int:category_id>')
 def get_category(category_id):
-    return True
+    category = Category.get_category_id(category_id)
+    if category:
+        category = CategorySchema().dump(category)
+        return {"category": category, "status": 200}
+    
+    return {"message": 'Category not found', "status": 400}
 
 @category.get('all')
 def get_all_categories():
-    return True
+    categories = Category.query.all()
+    category_list = CategorySchema().dump(categories, many=True)
+    return {"categories": category_list, "status": 200}

@@ -1,4 +1,5 @@
 from datetime import datetime
+from operator import or_
 from app import db
 from werkzeug.security import check_password_hash as check_passwd
 from werkzeug.security import generate_password_hash as gen_passwd
@@ -18,12 +19,26 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
+    def edit_user(self, name=None, username=None, password=None):
+        self.name = name or self.name
+        self.username = username or self.username
+        self.password = gen_passwd(password) or self.password
         self.updated_at = timestamp
         db.session.commit()
 
     def check_password(self, password):
         return check_passwd(self.password, password)
+    
+    def update_profile(self, name, username, password):
+        return True
+    
+    @classmethod
+    def get_by_username_or_id(cls, username=None, user_id=None):
+        return cls.query.filter(or_(cls.username==username, cls.user_id==user_id)).first()
+    
+    @classmethod
+    def get_user_by_id(cls, user_id):
+        return cls.query.filter_by(user_id=user_id).first()
 
     @classmethod
     def get_by_username(cls, username):
