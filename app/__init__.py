@@ -20,5 +20,7 @@ def index():
 
 from app.user.endpoints import user
 from app.category.endpoints import category
+from app.feed.endpoints import feed
 app.register_blueprint(user)
 app.register_blueprint(category)
+app.register_blueprint(feed)

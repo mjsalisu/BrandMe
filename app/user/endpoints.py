@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.user.models import User
-from app.user.schema import UserSchema, UsersSchema
+from app.user.schema import ProfileSchema, UserSchema
 
 user = Blueprint('user', __name__, url_prefix='/user')
 
@@ -49,12 +49,12 @@ def update_user(user_id):
 def get_user(user_id):
     user = User.get_user_by_id(user_id)
     if user:
-        user = UserSchema().dump(user)
+        user = ProfileSchema().dump(user)
         return {"user": user, "status": 200}
     return True
 
 @user.get('all')
 def get_all_users():
     users = User.query.all()
-    users_list = UsersSchema().dump(users, many=True)
+    users_list = UserSchema().dump(users, many=True)
     return {"users": users_list, "status": 200}

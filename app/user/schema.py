@@ -1,13 +1,12 @@
-from app import db
 from app import ma
 from app.user.models import User
 
 
-class UserSchema(ma.SQLAlchemyAutoSchema):
+class ProfileSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
 
-class UsersSchema(ma.SQLAlchemySchema):
+class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = User
         load_instance = True
