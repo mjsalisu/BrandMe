@@ -14,12 +14,13 @@ class Category(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
+    def edit_category(self, name=None):
+        self.name = name or self.name
         self.updated_at = timestamp
         db.session.commit()
 
     @classmethod
-    def get_category_id(cls, category_id):
+    def get_category_by_id(cls, category_id):
         return cls.query.filter_by(category_id=category_id).first()
 
     @classmethod

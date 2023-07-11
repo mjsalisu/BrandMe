@@ -18,13 +18,20 @@ def create_category():
     
     return {"message": 'Category creation failed, please try again', "status": 400}
 
-@category.put('update')
-def update_category():
-    return True
+@category.patch('edit/<int:category_id>')
+def edit_category(category_id):
+    name = request.json.get('name')
 
-@category.get('<int:category_id>')
+    check_category = Category.get_category_by_id(category_id=category_id)
+    if check_category:
+        Category.edit_category(check_category, name=name)
+        return {"message": 'Category updated successfully', "status": 200}
+    
+    return {"message": 'Category not found', "status": 400}
+
+@category.get('view/<int:category_id>')
 def get_category(category_id):
-    category = Category.get_category_id(category_id)
+    category = Category.get_category_by_id(category_id)
     if category:
         category = CategorySchema().dump(category)
         return {"category": category, "status": 200}
