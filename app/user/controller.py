@@ -3,9 +3,9 @@ from flask import Blueprint, g, jsonify, request
 from app.user.model import User
 from app.user.schema import UserSchema
 from app.route_guard import auth_required
-bp = Blueprint('user', __name__)
+user = Blueprint('user', __name__, url_prefix='/user')
 
-@bp.post('/login')
+@user.post('/login')
 def login():
     data = request.json
     
@@ -20,7 +20,7 @@ def login():
     token = user.generate_token()
     return jsonify({'token': token, 'user': UserSchema().dump(user)}), 200
 
-@bp.patch('/reset-password')
+@user.patch('/reset-password')
 @auth_required()
 def reset_password():
     new_password = request.json.get('password')
@@ -32,7 +32,7 @@ def reset_password():
     return jsonify({'message': 'Password updated successfully'}), 200
     
 
-@bp.post('/register')
+@user.post('/register')
 def register():
     data = request.json
     user = User.get_by_email(data.get('email'))

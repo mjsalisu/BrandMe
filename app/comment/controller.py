@@ -4,15 +4,15 @@ from app.route_guard import auth_required
 from app.comment.model import *
 from app.comment.schema import *
 
-bp = Blueprint('comment', __name__)
+comment = Blueprint('comment', __name__, url_prefix='/comment')
 
-@bp.post('/comment')
+@comment.post('/comment')
 @auth_required()
 def create_comment():
     comment = Comment.create()
     return CommentSchema().dump(comment), 201
 
-@bp.get('/comment/<int:id>')
+@comment.get('/comment/<int:id>')
 @auth_required()
 def get_comment(id):
     comment = Comment.get_by_id(id)
@@ -20,7 +20,7 @@ def get_comment(id):
         return {'message': 'Comment not found'}, 404
     return CommentSchema().dump(comment), 200
 
-@bp.patch('/comment/<int:id>')
+@comment.patch('/comment/<int:id>')
 @auth_required()
 def update_comment(id):
     comment = Comment.get_by_id(id)
@@ -29,7 +29,7 @@ def update_comment(id):
     comment.update()
     return CommentSchema().dump(comment), 200
 
-@bp.delete('/comment/<int:id>')
+@comment.delete('/comment/<int:id>')
 @auth_required()
 def delete_comment(id):
     comment = Comment.get_by_id(id)
@@ -38,7 +38,7 @@ def delete_comment(id):
     comment.delete()
     return {'message': 'Comment deleted successfully'}, 200
 
-@bp.get('/comments')
+@comment.get('/comments')
 @auth_required()
 def get_comments():
     comments = Comment.get_all()

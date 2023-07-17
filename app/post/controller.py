@@ -4,9 +4,9 @@ from app.route_guard import auth_required
 from app.post.model import *
 from app.post.schema import *
 
-bp = Blueprint('post', __name__)
+post = Blueprint('post', __name__, url_prefix='/post')
 
-@bp.post('/create')
+@post.post('/create')
 @auth_required()
 def create_post():
     media = request.json.get('media')
@@ -26,7 +26,7 @@ def create_post():
     else:
         return {"message": 'Please provide all required fields', "status": 400}
 
-@bp.get('/post/<int:id>')
+@post.get('/post/<int:id>')
 @auth_required()
 def get_post(id):
     post = Post.get_by_id(id)
@@ -34,7 +34,7 @@ def get_post(id):
         return {'message': 'Post not found'}, 404
     return PostSchema().dump(post), 200
 
-@bp.patch('/post/<int:id>')
+@post.patch('/post/<int:id>')
 @auth_required()
 def update_post(id):
     media = request.json.get('media')
@@ -56,7 +56,7 @@ def update_post(id):
     # return {"message": 'Post updated successfully', "status": 200}
     
 
-@bp.delete('/post/<int:id>')
+@post.delete('/post/<int:id>')
 @auth_required()
 def delete_post(id):
     post = Post.get_by_id(id)
@@ -65,7 +65,7 @@ def delete_post(id):
     post.delete()
     return {'message': 'Post deleted successfully'}, 200
 
-@bp.get('/posts')
+@post.get('/posts')
 @auth_required()
 def get_posts():
     posts = Post.get_all()

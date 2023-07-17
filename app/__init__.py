@@ -23,24 +23,32 @@ migrate = Migrate(app, db)
 
 
 # Controllers
-from app.user.controller import bp as user_bp
-app.register_blueprint(user_bp)
-from app.post.controller import bp as post_bp
-app.register_blueprint(post_bp)
-from app.follower.controller import bp as follower_bp
-app.register_blueprint(follower_bp)
-from app.notification.controller import bp as notification_bp
-app.register_blueprint(notification_bp)
-from app.like.controller import bp as like_bp
-app.register_blueprint(like_bp)
-from app.comment.controller import bp as comment_bp
-app.register_blueprint(comment_bp)
-from app.tag.controller import bp as tag_bp
-app.register_blueprint(tag_bp)
-from app.chat.controller import bp as chat_bp
-app.register_blueprint(chat_bp)
-from app.category.controller import bp as category_bp
-app.register_blueprint(category_bp)
+from app.user.controller import user
+app.register_blueprint(user)
+
+from app.category.controller import category
+app.register_blueprint(category)
+
+from app.post.controller import post
+app.register_blueprint(post)
+
+from app.follower.controller import follower
+app.register_blueprint(follower)
+
+from app.notification.controller import notification
+app.register_blueprint(notification)
+
+from app.like.controller import like
+app.register_blueprint(like)
+
+from app.comment.controller import comment
+app.register_blueprint(comment)
+
+from app.tag.controller import tag
+app.register_blueprint(tag)
+
+from app.chat.controller import chat
+app.register_blueprint(chat)
 
 # Error handlers
 from .error_handlers import *

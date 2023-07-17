@@ -4,15 +4,15 @@ from app.route_guard import auth_required
 from app.chat.model import *
 from app.chat.schema import *
 
-bp = Blueprint('chat', __name__)
+chat = Blueprint('chat', __name__, url_prefix='/chat')
 
-@bp.post('/chat')
+@chat.post('/chat')
 @auth_required()
 def create_chat():
     chat = Chat.create()
     return ChatSchema().dump(chat), 201
 
-@bp.get('/chat/<int:id>')
+@chat.get('/chat/<int:id>')
 @auth_required()
 def get_chat(id):
     chat = Chat.get_by_id(id)
@@ -20,7 +20,7 @@ def get_chat(id):
         return {'message': 'Chat not found'}, 404
     return ChatSchema().dump(chat), 200
 
-@bp.patch('/chat/<int:id>')
+@chat.patch('/chat/<int:id>')
 @auth_required()
 def update_chat(id):
     chat = Chat.get_by_id(id)
@@ -29,7 +29,7 @@ def update_chat(id):
     chat.update()
     return ChatSchema().dump(chat), 200
 
-@bp.delete('/chat/<int:id>')
+@chat.delete('/chat/<int:id>')
 @auth_required()
 def delete_chat(id):
     chat = Chat.get_by_id(id)
@@ -38,7 +38,7 @@ def delete_chat(id):
     chat.delete()
     return {'message': 'Chat deleted successfully'}, 200
 
-@bp.get('/chats')
+@chat.get('/chats')
 @auth_required()
 def get_chats():
     chats = Chat.get_all()

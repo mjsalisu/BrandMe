@@ -4,15 +4,15 @@ from app.route_guard import auth_required
 from app.tag.model import *
 from app.tag.schema import *
 
-bp = Blueprint('tag', __name__)
+tag = Blueprint('tag', __name__, url_prefix='/tag')
 
-@bp.post('/tag')
+@tag.post('/tag')
 @auth_required()
 def create_tag():
     tag = Tag.create()
     return TagSchema().dump(tag), 201
 
-@bp.get('/tag/<int:id>')
+@tag.get('/tag/<int:id>')
 @auth_required()
 def get_tag(id):
     tag = Tag.get_by_id(id)
@@ -20,7 +20,7 @@ def get_tag(id):
         return {'message': 'Tag not found'}, 404
     return TagSchema().dump(tag), 200
 
-@bp.patch('/tag/<int:id>')
+@tag.patch('/tag/<int:id>')
 @auth_required()
 def update_tag(id):
     tag = Tag.get_by_id(id)
@@ -29,7 +29,7 @@ def update_tag(id):
     tag.update()
     return TagSchema().dump(tag), 200
 
-@bp.delete('/tag/<int:id>')
+@tag.delete('/tag/<int:id>')
 @auth_required()
 def delete_tag(id):
     tag = Tag.get_by_id(id)
@@ -38,7 +38,7 @@ def delete_tag(id):
     tag.delete()
     return {'message': 'Tag deleted successfully'}, 200
 
-@bp.get('/tags')
+@tag.get('/tags')
 @auth_required()
 def get_tags():
     tags = Tag.get_all()
