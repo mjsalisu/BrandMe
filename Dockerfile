@@ -1,18 +1,29 @@
-# Base Image
-FROM python:3.9-slim
+FROM python:3.9
 
-# Work directory
+# Install supervisor
+RUN apt-get update && apt-get install -y supervisor
+
+RUN mkdir app
+
+RUN cd app
+
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
+
 RUN pip install -r requirements.txt
 
-# Copy other project files
 COPY . .
 
-# Expose a port to Containers 
-EXPOSE 8080
+# TODO: Add all your environment variables here
+# ARG DATABASE_URI
+# ENV DATABASE_URI=${DATABASE_URI}
 
-# Command to run on server
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+RUN flask db upgrade
+
+RUN python manage.py
+
+
+EXPOSE 80
+
+CMD bash -c "supervisord -c supervisord.conf"
