@@ -8,3 +8,4 @@ FLASK SETUP LOG
 2023-07-17 15:47:31: Blueprint comment added successfully
 2023-07-17 15:47:36: Blueprint tag added successfully
 2023-07-17 15:47:39: Blueprint chat added successfully
+2023-07-17 16:04:52: Blueprint category added successfully

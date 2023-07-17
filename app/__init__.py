@@ -39,6 +39,8 @@ from app.tag.controller import bp as tag_bp
 app.register_blueprint(tag_bp)
 from app.chat.controller import bp as chat_bp
 app.register_blueprint(chat_bp)
+from app.category.controller import bp as category_bp
+app.register_blueprint(category_bp)
 
 # Error handlers
 from .error_handlers import *
