@@ -1,14 +1,19 @@
+from operator import or_
 import jwt, string, secrets, bcrypt
 from datetime import datetime
 from app import app, db, secret
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String, nullable=True)
     email = db.Column(db.String, unique=True, nullable=True)
+    username = db.Column(db.String, unique=True, nullable=True)
     password = db.Column(db.String, nullable=False)
+    profile_picture = db.Column(db.String, nullable=True)
+    cover_picture = db.Column(db.String, nullable=True)
+    role = db.Column(db.String, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
-    role = db.Column(db.String, nullable=True)
     
     def save(self):
         db.session.add(self)
@@ -50,6 +55,10 @@ class User(db.Model):
         self.password = new_password
         self.hash_password()
         self.update()
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.filter_by().all()
     
     @classmethod
     def get_by_id(cls, id):
@@ -60,8 +69,16 @@ class User(db.Model):
         return User.query.filter(User.email==email).first()
     
     @classmethod
-    def create(cls, email, password, role):
-        user = cls(email=email, password=password, role=role)
+    def get_by_username(self, username):
+        return User.query.filter(User.username==username).first()
+    
+    @classmethod
+    def get_by_email_or_username(cls, email=None, username=None):
+        return cls.query.filter(or_(cls.email==email, cls.username==username)).first()
+    
+    @classmethod
+    def create(cls, fullname, email, username, password, profile_picture, cover_picture, role):
+        user = cls(fullname=fullname, email=email, username=username, password=password, profile_picture=profile_picture, cover_picture=cover_picture, role=role)
         user.hash_password()
         user.save()
         return user

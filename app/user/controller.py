@@ -8,7 +8,6 @@ user = Blueprint('user', __name__, url_prefix='/user')
 @user.post('/login')
 def login():
     data = request.json
-    
     email = data.get('email')
     user = User.get_by_email(email)
     
@@ -35,10 +34,50 @@ def reset_password():
 @user.post('/register')
 def register():
     data = request.json
-    user = User.get_by_email(data.get('email'))
+    user = User.get_by_email_or_username(data.get('email'), data.get('username'))
     if user is not None:
         return jsonify({'message': 'User already exists'}), 400
-    user = User.create(data.get('email'), data.get('password'), data.get('role'))
+    user = User.create(
+        data.get('fullname'),
+        data.get('email'),
+        data.get('username'),
+        data.get('password'),
+        data.get('profile_picture'),
+        data.get('cover_picture'),
+        data.get('role')
+        )
     if user is not None:
         return jsonify({'message': 'User created'}), 201
     return jsonify({'message': 'User not created'}), 400
+
+@user.get('/profile/<int:id>')
+@auth_required()
+def get_user(id):
+    user = User.get_by_id(id)
+    if user is None:
+        return {'message': 'User not found'}, 404
+    return UserSchema().dump(user), 200
+
+@user.patch('/update/<int:id>')
+@auth_required()
+def update_user(id):
+    user = User.get_by_id(id)
+    if user is None:
+        return {'message': 'User not found'}, 404
+    User.update()
+    return UserSchema().dump(user), 200
+
+@user.delete('/delete/<int:id>')
+@auth_required()
+def delete_user(id):
+    user = User.get_by_id(id)
+    if user is None:
+        return {'message': 'User not found'}, 404
+    User.delete()
+    return {'message': 'User deleted successfully'}, 200
+
+@user.get('/users')
+@auth_required()
+def get_users():
+    users = User.get_all()
+    return UserSchema(many=True).dump(users), 200
