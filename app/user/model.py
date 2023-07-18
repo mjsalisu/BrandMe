@@ -19,7 +19,13 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
     
-    def update(self):
+    def update(self, fullname=None, email=None, username=None, profile_picture=None, cover_picture=None, role=None):
+        self.fullname = fullname or self.fullname
+        self.email = email or self.email
+        self.username = username or self.username
+        self.profile_picture = profile_picture or self.profile_picture
+        self.cover_picture = cover_picture or self.cover_picture
+        self.role = role or self.role
         self.updated_at = db.func.now()
         db.session.commit()
     

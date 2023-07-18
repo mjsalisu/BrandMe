@@ -7,13 +7,13 @@ from app.tag.schema import *
 tag = Blueprint('tag', __name__, url_prefix='/tag')
 
 @tag.post('/tag')
-@auth_required()
+# @auth_required()
 def create_tag():
     tag = Tag.create()
     return TagSchema().dump(tag), 201
 
 @tag.get('/tag/<int:id>')
-@auth_required()
+# @auth_required()
 def get_tag(id):
     tag = Tag.get_by_id(id)
     if tag is None:
@@ -21,7 +21,7 @@ def get_tag(id):
     return TagSchema().dump(tag), 200
 
 @tag.patch('/tag/<int:id>')
-@auth_required()
+# @auth_required()
 def update_tag(id):
     tag = Tag.get_by_id(id)
     if tag is None:
@@ -30,7 +30,7 @@ def update_tag(id):
     return TagSchema().dump(tag), 200
 
 @tag.delete('/tag/<int:id>')
-@auth_required()
+# @auth_required()
 def delete_tag(id):
     tag = Tag.get_by_id(id)
     if tag is None:
@@ -39,7 +39,7 @@ def delete_tag(id):
     return {'message': 'Tag deleted successfully'}, 200
 
 @tag.get('/tags')
-@auth_required()
+# @auth_required()
 def get_tags():
     tags = Tag.get_all()
     return TagSchema(many=True).dump(tags), 200

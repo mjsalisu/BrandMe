@@ -7,7 +7,7 @@ from app.post.schema import *
 post = Blueprint('post', __name__, url_prefix='/post')
 
 @post.post('/create')
-@auth_required()
+# @auth_required()
 def create_post():
     media = request.json.get('media')
     caption = request.json.get('caption')
@@ -27,7 +27,7 @@ def create_post():
         return {"message": 'Please provide all required fields', "status": 400}
 
 @post.get('/post/<int:id>')
-@auth_required()
+# @auth_required()
 def get_post(id):
     post = Post.get_by_id(id)
     if post is None:
@@ -35,7 +35,7 @@ def get_post(id):
     return PostSchema().dump(post), 200
 
 @post.patch('/post/<int:id>')
-@auth_required()
+# @auth_required()
 def update_post(id):
     media = request.json.get('media')
     caption = request.json.get('caption')
@@ -57,7 +57,7 @@ def update_post(id):
     
 
 @post.delete('/post/<int:id>')
-@auth_required()
+# @auth_required()
 def delete_post(id):
     post = Post.get_by_id(id)
     if post is None:
@@ -66,7 +66,7 @@ def delete_post(id):
     return {'message': 'Post deleted successfully'}, 200
 
 @post.get('/posts')
-@auth_required()
+# @auth_required()
 def get_posts():
     posts = Post.get_all()
     return PostSchema(many=True).dump(posts), 200
