@@ -11,4 +11,3 @@ class PostSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
         include_fk = True
     category = ma.Nested(CategorySchema)
-    user = ma.Nested(UserSchema)

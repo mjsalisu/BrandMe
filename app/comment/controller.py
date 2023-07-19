@@ -1,18 +1,31 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from app.notification.model import Notification
 from app.route_guard import auth_required
 
 from app.comment.model import *
 from app.comment.schema import *
+from app.user.model import User
+from app.post.model import Post
 
 comment = Blueprint('comment', __name__, url_prefix='/comment')
 
-@comment.post('/comment')
+@comment.post('/create')
 # @auth_required()
 def create_comment():
-    comment = Comment.create()
+    data = request.json
+    if User.get_by_id(data.get('user_id')) is None:
+        return {"message": 'User not found', "status": 400}
+    if Post.get_by_id(data.get('post_id')) is None:
+        return {"message": 'Post not found', "status": 400}
+    # throw notification -> receiver_id, content, type
+    # Notification.create(
+    #     post_id=data.get('post_id'),
+    #     content='commented on your post',
+    #     type='comment'
+    # )
     return CommentSchema().dump(comment), 201
 
-@comment.get('/comment/<int:id>')
+@comment.get('/view/<int:id>')
 # @auth_required()
 def get_comment(id):
     comment = Comment.get_by_id(id)
@@ -20,26 +33,33 @@ def get_comment(id):
         return {'message': 'Comment not found'}, 404
     return CommentSchema().dump(comment), 200
 
-@comment.patch('/comment/<int:id>')
+@comment.patch('/update/<int:id>')
 # @auth_required()
 def update_comment(id):
+    data = request.json
     comment = Comment.get_by_id(id)
     if comment is None:
         return {'message': 'Comment not found'}, 404
-    comment.update()
+    comment.update(
+        comment,
+        text=data.get('text')
+    )
     return CommentSchema().dump(comment), 200
 
-@comment.delete('/comment/<int:id>')
-# @auth_required()
-def delete_comment(id):
-    comment = Comment.get_by_id(id)
-    if comment is None:
-        return {'message': 'Comment not found'}, 404
-    comment.delete()
-    return {'message': 'Comment deleted successfully'}, 200
-
-@comment.get('/comments')
+@comment.get('/all')
 # @auth_required()
 def get_comments():
     comments = Comment.get_all()
+    return CommentSchema(many=True).dump(comments), 200
+
+@comment.get('/post/<int:id>')
+# @auth_required()
+def get_comments_by_post(id):
+    comments = Comment.get_by_post(id)
+    return CommentSchema(many=True).dump(comments), 200
+
+@comment.get('/user/<int:id>')
+# @auth_required()
+def get_comments_by_user(id):
+    comments = Comment.get_by_user(id)
     return CommentSchema(many=True).dump(comments), 200

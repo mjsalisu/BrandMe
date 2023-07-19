@@ -2,7 +2,7 @@ from app import db
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
     is_deleted = db.Column(db.Boolean, default=False)
@@ -24,6 +24,10 @@ class Category(db.Model):
     @classmethod
     def get_by_id(cls, id):
         return cls.query.filter_by(id=id, is_deleted=False).first()
+    
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.query.filter_by(name=name, is_deleted=False).first()
     
     @classmethod
     def get_all(cls):

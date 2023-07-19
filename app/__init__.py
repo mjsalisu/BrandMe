@@ -11,7 +11,6 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 CORS(app)
 
-
 # Celery
 from app.celery import make_celery
 celery = make_celery(app)
@@ -20,7 +19,6 @@ celery = make_celery(app)
 from config import secret
 app.secret_key = secret
 migrate = Migrate(app, db)
-
 
 # Controllers
 from app.user.controller import user

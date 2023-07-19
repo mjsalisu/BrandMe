@@ -6,8 +6,7 @@ class Post(db.Model):
     caption = db.Column(db.String, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     category = db.relationship("Category")
-    user_tag = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship("User")
+    hash_tag = db.Column(db.String)
     visibility = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
@@ -17,12 +16,12 @@ class Post(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self, media, caption, category_id, user_tag, visibility):
+    def update(self, media=None, caption=None, category_id=None, hash_tag=None, visibility=None):
         self.media = media or self.media
         self.caption = caption or self.caption
-        category_id = category_id or self.category_id
-        user_tag = user_tag or self.user_tag
-        visibility = visibility or self.visibility
+        self.category_id = category_id or self.category_id
+        self.hash_tag = hash_tag or self.hash_tag
+        self.visibility = visibility or self.visibility
         self.updated_at = db.func.now()
         db.session.commit()
     
@@ -40,7 +39,7 @@ class Post(db.Model):
         return cls.query.filter_by(is_deleted=False).all()
     
     @classmethod
-    def create(cls, media, caption, category_id, user_tag, visibility):
-        post = cls(media=media, caption=caption, category_id=category_id, user_tag=user_tag, visibility=visibility)
+    def create(cls, media, caption, category_id, hash_tag, visibility):
+        post = cls(media=media, caption=caption, category_id=category_id, hash_tag=hash_tag, visibility=visibility)
         post.save()
         return post
