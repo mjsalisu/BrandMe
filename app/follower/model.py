@@ -4,7 +4,7 @@ class Follower(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    followed_profile = db.relationship("User")
+    followed_data = db.relationship("User")
     is_following = db.Column(db.Boolean, default=True)
     followed_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime)

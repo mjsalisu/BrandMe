@@ -9,4 +9,4 @@ class FollowerSchema(ma.SQLAlchemyAutoSchema):
 
         include_relationships = True
         include_fk = True
-    follower_profile = ma.Nested(UserSchema)
+    followed_data = ma.Nested(UserSchema)

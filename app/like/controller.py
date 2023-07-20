@@ -55,5 +55,5 @@ def get_likes_by_user(id):
 @like.get('/post/<int:id>')
 # @auth_required()
 def get_likes_by_post(id):
-    likes = Like.get_by_post(id)
+    likes = Like.get_by_post_id(id)
     return LikeSchema(many=True).dump(likes), 200

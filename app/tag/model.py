@@ -5,14 +5,12 @@ class Tag(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False, unique=True)
     post = db.relationship("Post")
     user_one_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user_one = db.relationship("User", foreign_keys=[user_one_id])
-    user_ond_media = db.Column(db.String)
+    user_one_media = db.Column(db.String, nullable=False)
     user_two_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_two = db.relationship("User", foreign_keys=[user_two_id])
     user_two_media = db.Column(db.String)
     user_three_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_three = db.relationship("User", foreign_keys=[user_three_id])
     user_three_media = db.Column(db.String)
+    # users_tag = db.relationship("User", foreign_keys=[user_one_id, user_two_id, user_three_id])
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())
     is_deleted = db.Column(db.Boolean, default=False)
@@ -42,6 +40,10 @@ class Tag(db.Model):
         return cls.query.filter_by(id=id, is_deleted=False).first()
     
     @classmethod
+    def get_a_post_by_id(cls, post_id):
+        return cls.query.filter_by(post_id=post_id, is_deleted=False).first()
+    
+    @classmethod
     def get_all(cls):
         return cls.query.filter_by(is_deleted=False).all()
     
@@ -50,7 +52,7 @@ class Tag(db.Model):
         return cls.query.filter_by(post_id=post_id, is_deleted=False).all()
     
     @classmethod
-    def create(cls, post_id, user_one_id, user_one_media, user_two_id, user_two_media, user_three_id, user_three_media):
-        tag = cls(post_id=post_id, user_one_id=user_one_id, user_one_media=user_one_media, user_two_id=user_two_id, user_two_media=user_two_media, user_three_id=user_three_id, user_three_media=user_three_media)
+    def create(cls, post_id, user_one_id, user_one_media):
+        tag = cls(post_id=post_id, user_one_id=user_one_id, user_one_media=user_one_media)
         tag.save()
         return tag

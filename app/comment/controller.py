@@ -17,12 +17,11 @@ def create_comment():
         return {"message": 'User not found', "status": 400}
     if Post.get_by_id(data.get('post_id')) is None:
         return {"message": 'Post not found', "status": 400}
-    # throw notification -> receiver_id, content, type
-    # Notification.create(
-    #     post_id=data.get('post_id'),
-    #     content='commented on your post',
-    #     type='comment'
-    # )
+    comment = Comment.create(
+        text=data.get('text'),
+        user_id=data.get('user_id'),
+        post_id=data.get('post_id')
+    )
     return CommentSchema().dump(comment), 201
 
 @comment.get('/view/<int:id>')
@@ -40,7 +39,7 @@ def update_comment(id):
     comment = Comment.get_by_id(id)
     if comment is None:
         return {'message': 'Comment not found'}, 404
-    comment.update(
+    Comment.update(
         comment,
         text=data.get('text')
     )
@@ -55,11 +54,11 @@ def get_comments():
 @comment.get('/post/<int:id>')
 # @auth_required()
 def get_comments_by_post(id):
-    comments = Comment.get_by_post(id)
+    comments = Comment.get_by_user_id(id)
     return CommentSchema(many=True).dump(comments), 200
 
 @comment.get('/user/<int:id>')
 # @auth_required()
 def get_comments_by_user(id):
-    comments = Comment.get_by_user(id)
+    comments = Comment.get_by_user_id(id)
     return CommentSchema(many=True).dump(comments), 200

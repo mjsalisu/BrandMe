@@ -13,13 +13,14 @@ def create_follower():
     data = request.json
     if User.get_by_id(data.get('user_id')) is None:
         return {"message": 'User not found', "status": 400}
-    if User.get_by_id(data.get('follower_id')) is None:
-        # Follower not found
-        follower = Follower.create(
-            user_id=data.get('user_id'),
-            follower_id=data.get('follower_id')
-        )
-        return FollowerSchema().dump(follower), 201
+    if User.get_by_id(data.get('followed_id')) is None:
+        return {"message": 'Follower not found', "status": 400}
+    # Follower not found
+    follower = Follower.create(
+        user_id=data.get('user_id'),
+        followed_id=data.get('followed_id')
+    )
+    return FollowerSchema().dump(follower), 201
 
 @follower.get('/view/<int:id>')
 # @auth_required()
@@ -47,5 +48,5 @@ def get_followers():
 @follower.get('/user/<int:id>')
 # @auth_required()
 def get_followers_by_user(id):
-    followers = Follower.get_by_user(id)
+    followers = Follower.get_by_user_id(id)
     return FollowerSchema(many=True).dump(followers), 200
