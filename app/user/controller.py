@@ -76,15 +76,6 @@ def update_user(id):
     )
     return UserSchema().dump(user), 200
 
-# @user.delete('/delete/<int:id>')
-@auth_required()
-# def delete_user(id):
-#     user = User.get_by_id(id)
-#     if user is None:
-#         return {'message': 'User not found'}, 404
-#     User.delete()
-#     return {'message': 'User deleted successfully'}, 200
-
 @user.get('/users')
 @auth_required()
 def get_users():
