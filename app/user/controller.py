@@ -20,7 +20,7 @@ def login():
     return jsonify({'token': token, 'user': UserSchema().dump(user)}), 200
 
 @user.patch('/reset-password')
-# @auth_required()
+@auth_required()
 def reset_password():
     new_password = request.json.get('password')
     if not new_password:
@@ -51,7 +51,7 @@ def register():
     return jsonify({'message': 'User not created'}), 400
 
 @user.get('/profile/<int:id>')
-# @auth_required()
+@auth_required()
 def get_user(id):
     user = User.get_by_id(id)
     if user is None:
@@ -59,7 +59,7 @@ def get_user(id):
     return UserSchema().dump(user), 200
 
 @user.patch('/setting/<int:id>')
-# @auth_required()
+@auth_required()
 def update_user(id):
     user = User.get_by_id(id)
     if user is None:
@@ -77,7 +77,7 @@ def update_user(id):
     return UserSchema().dump(user), 200
 
 # @user.delete('/delete/<int:id>')
-# @auth_required()
+@auth_required()
 # def delete_user(id):
 #     user = User.get_by_id(id)
 #     if user is None:
@@ -86,7 +86,7 @@ def update_user(id):
 #     return {'message': 'User deleted successfully'}, 200
 
 @user.get('/users')
-# @auth_required()
+@auth_required()
 def get_users():
     users = User.get_all()
     return UserSchema(many=True).dump(users), 200

@@ -10,7 +10,7 @@ from app.post.model import Post
 comment = Blueprint('comment', __name__, url_prefix='/comment')
 
 @comment.post('/create')
-# @auth_required()
+@auth_required()
 def create_comment():
     data = request.json
     if User.get_by_id(data.get('user_id')) is None:
@@ -25,7 +25,7 @@ def create_comment():
     return CommentSchema().dump(comment), 201
 
 @comment.get('/view/<int:id>')
-# @auth_required()
+@auth_required()
 def get_comment(id):
     comment = Comment.get_by_id(id)
     if comment is None:
@@ -33,7 +33,7 @@ def get_comment(id):
     return CommentSchema().dump(comment), 200
 
 @comment.patch('/update/<int:id>')
-# @auth_required()
+@auth_required()
 def update_comment(id):
     data = request.json
     comment = Comment.get_by_id(id)
@@ -46,19 +46,19 @@ def update_comment(id):
     return CommentSchema().dump(comment), 200
 
 @comment.get('/all')
-# @auth_required()
+@auth_required()
 def get_comments():
     comments = Comment.get_all()
     return CommentSchema(many=True).dump(comments), 200
 
 @comment.get('/post/<int:id>')
-# @auth_required()
+@auth_required()
 def get_comments_by_post(id):
     comments = Comment.get_by_user_id(id)
     return CommentSchema(many=True).dump(comments), 200
 
 @comment.get('/user/<int:id>')
-# @auth_required()
+@auth_required()
 def get_comments_by_user(id):
     comments = Comment.get_by_user_id(id)
     return CommentSchema(many=True).dump(comments), 200

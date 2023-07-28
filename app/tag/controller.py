@@ -8,7 +8,7 @@ from app.tag.schema import *
 tag = Blueprint('tag', __name__, url_prefix='/tag')
 
 @tag.post('/create')
-# @auth_required()
+@auth_required()
 def create_tag():
     data = request.json
     if Post.get_by_id(data.get('post_id')) is None:
@@ -26,7 +26,7 @@ def create_tag():
     return {'message': 'Tag already exist for this post, use update instead'}, 400
 
 @tag.get('/view/<int:id>')
-# @auth_required()
+@auth_required()
 def get_tag(id):
     tag = Tag.get_by_id(id)
     if tag is None:
@@ -34,7 +34,7 @@ def get_tag(id):
     return TagSchema().dump(tag), 200
 
 @tag.patch('/update/<int:id>')
-# @auth_required()
+@auth_required()
 def update_tag(id):
     data = request.json
     tag = Tag.get_by_id(id)
@@ -61,13 +61,13 @@ def update_tag(id):
         return {'message': 'users cannot be updated'}, 400
 
 @tag.get('/all')
-# @auth_required()
+@auth_required()
 def get_tags():
     tags = Tag.get_all()
     return TagSchema(many=True).dump(tags), 200
 
 @tag.get('/post/<int:id>')
-# @auth_required()
+@auth_required()
 def get_tags_by_post(id):
     tags = Tag.get_by_post_id(id)
     return TagSchema(many=True).dump(tags), 200

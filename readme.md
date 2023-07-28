@@ -18,6 +18,6 @@
 Install all dependencies from requirements file with: `pip install -r requirements.txt`
 """
 
-## TEP FOUR
+## STEP FOUR
 
 Starts the server `fs start`

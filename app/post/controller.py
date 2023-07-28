@@ -9,7 +9,7 @@ from app.category.model import Category
 post = Blueprint('post', __name__, url_prefix='/post')
 
 @post.post('/create')
-# @auth_required()
+@auth_required()
 def create_post():
     data = request.json
     if Category.get_by_id(data.get('category_id')) is None:
@@ -25,7 +25,7 @@ def create_post():
     return PostSchema().dump(post), 201
     
 @post.get('/view/<int:id>')
-# @auth_required()
+@auth_required()
 def get_post(id):
     post = Post.get_by_id(id)
     if post is None:
@@ -33,7 +33,7 @@ def get_post(id):
     return PostSchema().dump(post), 200
 
 @post.patch('/update/<int:id>')
-# @auth_required()
+@auth_required()
 def update_post(id):
     data = request.json
 
@@ -52,7 +52,7 @@ def update_post(id):
     return PostSchema().dump(post), 200
 
 @post.get('/all')
-# @auth_required()
+@auth_required()
 def get_posts():
     posts = Post.get_all()
     return PostSchema(many=True).dump(posts), 200
