@@ -17,7 +17,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Add the missing environment variable
-ENV SQLALCHEMY_DATABASE_URI=
+ENV SQLALCHEMY_DATABASE_URI="sqlite:////tmp/sample.db"
 
 RUN flask db upgrade
 
