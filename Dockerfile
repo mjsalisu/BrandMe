@@ -1,3 +1,4 @@
+
 FROM python:3.9
 
 # Install supervisor
@@ -15,14 +16,12 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# TODO: Add all your environment variables here
-# ARG DATABASE_URI
-# ENV DATABASE_URI=${DATABASE_URI}
+# Add the missing environment variable
+ENV SQLALCHEMY_DATABASE_URI=
 
 RUN flask db upgrade
 
 RUN python manage.py
-
 
 EXPOSE 80
 
