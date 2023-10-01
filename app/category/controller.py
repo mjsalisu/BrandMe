@@ -7,7 +7,7 @@ from app.category.schema import *
 category = Blueprint('category', __name__, url_prefix='/category')
 
 @category.post('/create')
-# @auth_required()
+@auth_required()
 def create_category():
     data = request.json
     if Category.get_by_name(data.get('name')) is not None:
