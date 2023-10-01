@@ -21,7 +21,7 @@ COPY . .
 # ENV DATABASE_URI=${DATABASE_URI}
 
 # Run Flask database upgrade
-RUN flask db upgrade
+RUN flask db init && upgrade
 RUN python manage.py
 
 # Expose a port to Containers 
