@@ -4,10 +4,10 @@ FROM python:3.9-slim
 # Install supervisor and bash
 RUN apt-get update && apt-get install -y supervisor bash
 
-RUN mkdir app
+RUN mkdir myapp
 
 # Work directory
-WORKDIR /app
+WORKDIR /myapp
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
@@ -21,8 +21,6 @@ COPY . .
 # ENV DATABASE_URI=${DATABASE_URI}
 
 # Run Flask database upgrade
-RUN flask db init
-RUN flask db migrate -m "init"
 RUN flask db upgrade
 RUN python manage.py
 
