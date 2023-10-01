@@ -1,4 +1,3 @@
-# Base Image
 FROM python:3.9-slim
 
 # Install supervisor and bash
@@ -20,12 +19,14 @@ COPY . .
 # ARG DATABASE_URI
 # ENV DATABASE_URI=${DATABASE_URI}
 
-# Run Flask database upgrade
-RUN flask db upgrade
-RUN python manage.py
+# Run database migrations
+RUN python manage.py db upgrade
 
-# Expose a port to Containers 
+# Start the application
+RUN python manage.py run
+
+# Expose a port to Containers
 EXPOSE 80
 
 # Start supervisor with the specified configuration file
-CMD bash -c "supervisord -c supervisord.conf" 
+CMD bash -c "supervisord -c supervisord.conf"```
