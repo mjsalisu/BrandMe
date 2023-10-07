@@ -21,6 +21,7 @@ COPY . .
 # ENV DATABASE_URI=${DATABASE_URI}
 
 # Run Flask database upgrade
+RUN flask db init
 RUN flask db upgrade
 RUN python manage.py
 
