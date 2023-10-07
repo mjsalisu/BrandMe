@@ -1,12 +1,13 @@
+# Base Image
 FROM python:3.9-slim
 
 # Install supervisor and bash
 RUN apt-get update && apt-get install -y supervisor bash
 
-RUN mkdir myapp
+RUN mkdir app
 
 # Work directory
-WORKDIR /myapp
+WORKDIR /app
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
@@ -19,14 +20,12 @@ COPY . .
 # ARG DATABASE_URI
 # ENV DATABASE_URI=${DATABASE_URI}
 
-# Run database migrations
-RUN python manage.py db upgrade
+# Run Flask database upgrade
+RUN flask db upgrade
+RUN python manage.py
 
-# Start the application
-RUN python manage.py run
-
-# Expose a port to Containers
+# Expose a port to Containers 
 EXPOSE 80
 
 # Start supervisor with the specified configuration file
-CMD bash -c "supervisord -c supervisord.conf"```
+CMD bash -c "supervisord -c supervisord.conf" 
