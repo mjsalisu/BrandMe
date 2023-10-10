@@ -22,6 +22,7 @@ COPY . .
 
 # Run Flask database upgrade
 RUN flask db init
+RUN flask db migrate -m "Initial migration."
 RUN flask db upgrade
 RUN python manage.py
 
